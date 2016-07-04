@@ -95,9 +95,13 @@ namespace Crafter {
 template<size_t size, size_t nbit>
 Crafter::BitsField<size,nbit>::BitsField(const std::string& name, size_t nword) :
 								Field<word>(name,nword,nbit,size),
-								nword(nword), offset(nword * 4 + nbit/8),
+								nword(nword),
+								/* Number of bytes to offset from header start */
+								offset(nword * 4 + nbit/8),
+								/* How many bytes long ? */
 								over_bytes((nbit % 8 + (size - 1)) / 8),
-								rightMargin(7 - (size - 1 + nbit) % 8),
+								/* How many bits do we skip in the rightmost byte */
+								rightMargin(nbit % 8),
 								maskLow((1 << (8 - nbit%8)) - 1),
 								maskHigh(~((1 << rightMargin) - 1))
 {
